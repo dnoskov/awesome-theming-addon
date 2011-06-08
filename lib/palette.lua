@@ -24,26 +24,6 @@ function parsepalette(palettefile)
    return colors     
 end
 
-function replace_xml_chunk (xmlfile)
-   xmldata = ""
-   for line in io.lines(xmlfile) do xmldata = xmldata .. line .. "\n" end
-   callbacks = {
-      StartElement  = function (parser, name, attr)
-			 if name == "acyl-settings" then
-			    io.write(name .. " starts\n")
-			 end
-		      end,
-      EndElement    = function (parser, name)
-			 if name == "acyl-settings" then
-			    io.write(name .. " stops\n")
-			 end
-		      end,
-      CharacterData = function (parser, string)
-		      end
-   }
-   p = lxp.new(callbacks)
-   p:parse(xmldata)
-end
 
 
 module("palette")
