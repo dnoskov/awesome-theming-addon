@@ -2,8 +2,14 @@
 require("awful")
 require("awful.autofocus")
 require("awful.rules")
+
+rcpath = {
+   awful.util.getdir("config").. "/lib/?.lua",
+   awful.util.getdir("config").. "/lib/?/init.lua"
+}
+package.path = package.path .. ";" .. table.concat(rcpath, ";")
+
 -- Theme handling library
--- require("palette")
 require("beautiful")
 -- Notification library
 require("naughty")
@@ -14,15 +20,12 @@ require("vicious")
 
 require("scratch")
 
-package.path = package.path .. "./lib/?.lua;./lib/?/init.lua"
-
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init(awful.util.getdir("config") .. "/themes/medusa/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-config = {}
 config = {
    modkey        = "Mod4",
    terminal      = "urxvtcd",
@@ -32,16 +35,13 @@ config = {
    xsudo         = "gksu"
 }
 
-config.cmd = {}
 config.cmd = {
+   editor       = config.editor .. " -c -a \"\"",
+   tod          = config.terminal .. " -name terminalondemand",
+   dropterminal = config.terminal .. " -name dropterminal",
    halt         = config.xsudo .. " halt",
    reboot       = config.xsudo .. " reboot"  
 }
-
-config.dropterminal  = config.terminal .. " -name dropterminal"
-config.tod           = config.terminal .. " -name terminalondemand"
-config.cmd.editor    = config.editor .. " -c -a \"\""
-
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -346,7 +346,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, ".",  shifty.shift_next       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
-    awful.key({                   }, "F12", function () scratch.drop(config.dropterminal, "top", "center", 1, 0.4, 0, 32) end),
+    awful.key({                   }, "F12", function () scratch.drop(config.cmd.dropterminal, "top", "center", 1, 0.4, 0, 32) end),
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -389,7 +389,7 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(config.terminal) end),
-    awful.key({ modkey, "Shift"   }, "Return", function () awful.util.spawn(config.tod) end),
+    awful.key({ modkey, "Shift"   }, "Return", function () awful.util.spawn(config.cmd.tod) end),
     
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey,           }, "q", awesome.quit),
