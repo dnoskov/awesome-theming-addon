@@ -2,18 +2,26 @@
 --  "Medusa" awesome theme     --
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
-
+require("configs")
+require("actions")
 require("palette")
 
 -- {{{ Main
-theme             = {}
-theme.name        = "Medusa"
-theme.path        = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
 
-theme.configs            = {}
-theme.configs.gtk        = os.getenv("HOME") .. "/.gtkcolors"
-theme.configs.xcolors    = os.getenv("HOME") .. "/.Xcolors"
-theme.configs.icons_path = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3/scalable/real_icons/"
+theme = {}
+theme.name       = "Medusa"
+theme.path       = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
+theme.configs    = {
+   gtk     = {
+      file = os.getenv("HOME") .. "/.gtkrc-2.0",
+      func = configs.getGTKrcString
+   },
+   xcolors = {
+      file  = os.getenv("HOME") .. "/.Xcolors",
+      func  = configs.getXcolorsString,
+      apply = configs.xcolorsApply
+   }
+}
 
 
 theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.jpg" }
@@ -33,58 +41,6 @@ theme.bg_normal = c["gunmetal"]
 theme.bg_focus  = c["bunker"]
 theme.bg_urgent = c["stratos3"]
 -- }}}
-
-gtk_color_scheme = 
-   'gtk_color_scheme ="fg_color:'..theme.fg_normal
-   ..'\\nbg_color:'..theme.bg_focus
-   ..'\\nbase_color:'..c["dark slate"]
-   ..'\\ntext_color:'..theme.fg_normal
-   ..'\\nselected_bg_color:'..theme.fg_focus
-   ..'\\nselected_fg_color:'..theme.bg_focus
-   ..'\\ntooltip_fg_color:'..theme.fg_normal
-   ..'\\ntooltip_bg_color:'..theme.bg_focus
-   ..'"'
-
-gtkcolorfile = io.open(theme.configs.gtk, "w")
-gtkcolorfile:write(gtk_color_scheme)
-gtkcolorfile:flush()
-gtkcolorfile:close()
-
-
--- Xcolors
-Xcolors = "!! " .. theme.name
-   .. "\n" .. "*foreground:" .. theme.fg_normal
-   .. "\n" .. "*background:" .. theme.bg_focus
-   .. "\n" .. "!black"
-   .. "\n" .. "*color0:" .. theme.bg_focus
-   .. "\n" .. "*color8:" .. c["black russian"]
-   .. "\n" .. "!red"
-   .. "\n" .. "*color1:" .. c["rouge"]
-   .. "\n" .. "*color9:" .. c["zest"]
-   .. "\n" .. "!green"
-   .. "\n" .. "*color2:" .. c["kaitoke green"]
-   .. "\n" .. "*color10:" .. c["fruit salad"]
-   .. "\n" .. "!brown/yellow"
-   .. "\n" .. "*color3:" .. c["nugget"]
-   .. "\n" .. "*color11:" .. c["Dark Khaki"]
-   .. "\n" .. "!blue"
-   .. "\n" .. "*color4:" .. c["stratos2"]
-   .. "\n" .. "*color12:" .. c["stratos4"]
-   .. "\n" .. "!magenta"
-   .. "\n" .. "*color5:" .. c["jagger"]
-   .. "\n" .. "*color13:" .. c["fuchsia"]
-   .. "\n" .. "!cyan" 
-   .. "\n" .. "*color6:" .. c["bismark"]
-   .. "\n" .. "*color14:" .. c["blue haze"]
-   .. "\n" .. "!white"
-   .. "\n" .. "*color7:" .. c["pattens blue"]
-   .. "\n" .. "*color15:" .. "#ffffff\n"
-
-xcolorsfile = io.open(theme.configs.xcolors, "w")
-xcolorsfile:write(Xcolors)
-xcolorsfile:flush()
-xcolorsfile:close()
-
 
 
 -- {{{ Borders
@@ -186,5 +142,73 @@ theme.layout_floating   = theme.path .. "/layouts/floating.png"
 -- theme.titlebar_maximized_button_normal_inactive = theme.path .. "/titlebar/maximized_normal_inactive.png"
 -- }}}
 -- }}}
+
+theme.configs.gtk.data = {
+   ["gtk-theme-name"]        = '"Termlike"',
+   ["gtk_color_scheme"] = {
+      ["fg_color:"]          = theme.fg_normal,
+      ["bg_color:"]          = theme.bg_focus,
+      ["base_color:"]        = c["dark slate"],
+      ["text_color:"]        = theme.fg_normal,
+      ["selected_bg_color:"] = theme.fg_focus,
+      ["selected_fg_color:"] = theme.bg_focus,
+      ["tooltip_fg_color:"]  = theme.fg_normal,
+      ["tooltip_bg_color:"]  = theme.bg_focus,
+   },
+   ["gtk-icon-theme-name"]   = '"ACYL_Icon_Theme_0.9.3"',
+   ["gtk-font-name"]         = "\"" .. theme.font .. "\"",
+   ["gtk-cursor-theme-name"] = '"OpenZone_Black_Slim"',
+   ["gtk-cursor-theme-size"] = 0,
+   ["gtk-toolbar-style"]     = "GTK_TOOLBAR_BOTH_HORIZ",
+   ["gtk-toolbar-icon-size"] = "GTK_ICON_SIZE_LARGE_TOOLBAR",
+   ["gtk-button-images"]     = "1",
+   ["gtk-menu-images"]       = "1",
+   ["gtk-enable-event-sounds"] = "1",
+   ["gtk-enable-input-feedback-sounds"] = "1",
+   ["gtk-xft-antialias"]     = "1",
+   ["gtk-xft-hinting"]       = "1",
+   ["gtk-xft-hintstyle"]     = '"hintfull"',
+   ["gtk-xft-rgba"]          = '"rgb"',
+}
+
+-- Xcolors
+theme.configs.xcolors.data = {
+   ["foreground"] = theme.fg_normal,
+   ["background"] = theme.bg_focus,
+   -- black
+   ["color0"] = theme.bg_focus,
+   ["color8"] = c["black russian"],
+   -- red
+   ["color1"] = c["rouge"],
+   ["color9"] = c["zest"],
+   -- green
+   ["color2"] = c["kaitoke green"],
+   ["color10"] = c["fruit salad"],
+   -- brown/yellow
+   ["color3"] = c["nugget"],
+   ["color11"] = c["Dark Khaki"],
+   -- blue
+   ["color4"] = c["stratos2"],
+   ["color12"] = c["stratos4"],
+   -- magenta
+   ["color5"] = c["jagger"],
+   ["color13"] = c["fuchsia"],
+   -- cyan
+   ["color6"] = c["bismark"],
+   ["color14"] = c["blue haze"],
+   -- white
+   ["color7"] = c["pattens blue"],
+   ["color15"] = "#ffffff",
+}
+
+for k, v in pairs(theme.configs) do
+   replaceFile(v.file, v.func(v.data))
+   if v.apply ~= nil then
+      if k == xcolors then
+	 print(v.apply(v.file))
+      end
+   end
+end
+
 
 return theme
