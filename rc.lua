@@ -3,7 +3,7 @@ require("awful")
 require("awful.autofocus")
 require("awful.rules")
 -- Theme handling library
-require("palette")
+-- require("palette")
 require("beautiful")
 -- Notification library
 require("naughty")
@@ -13,6 +13,9 @@ require("shifty")
 require("vicious")
 
 require("scratch")
+
+package.path = package.path .. "./lib/?.lua;./lib/?/init.lua"
+
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers

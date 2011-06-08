@@ -3,14 +3,17 @@
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
 
+require("palette")
+
 -- {{{ Main
 theme             = {}
 theme.name        = "Medusa"
 theme.path        = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
 
-theme.configs         = {}
-theme.configs.gtk     = os.getenv("HOME") .. "/.gtkcolors"
-theme.configs.xcolors = os.getenv("HOME") .. "/.Xcolors"
+theme.configs            = {}
+theme.configs.gtk        = os.getenv("HOME") .. "/.gtkcolors"
+theme.configs.xcolors    = os.getenv("HOME") .. "/.Xcolors"
+theme.configs.icons_path = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3/scalable/real_icons/"
 
 
 theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.jpg" }
@@ -82,8 +85,6 @@ xcolorsfile:write(Xcolors)
 xcolorsfile:flush()
 xcolorsfile:close()
 
-
-table.foreach(theme.configs, print)
 
 
 -- {{{ Borders
