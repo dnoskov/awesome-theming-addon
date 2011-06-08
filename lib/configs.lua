@@ -1,5 +1,3 @@
-require("theming-utils")
-
 module(..., package.seeall)
 
 configs.gtktest = {
