@@ -88,10 +88,11 @@ shifty.config.apps = {
    { match = { "terminalondemand"              }, intrusive = true                      },
    { match = { "emacs", "texmacs"              }, intrusive = true,                     },
    { match = { "Deluge","nicotine"             }, tag = "p2p",                          },
-   { match = { "" }, clientbuttons = {
-	 button({ }, 1, function (c) client.focus = c; c:raise() end),
-	 button({ modkey }, 1, function (c) awful.mouse.client.move() end),
-	 button({ modkey }, 3, awful.mouse.client.resize ), }, },
+   { match = { "" }, clientbuttons = awful.util.table.join(
+	   awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+	   awful.button({ modkey }, 1, awful.mouse.client.move),
+	   awful.button({ modkey }, 3, awful.mouse.client.resize))
+   }
 }
 
 shifty.config.defaults = {
