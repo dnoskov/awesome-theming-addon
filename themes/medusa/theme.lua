@@ -2,9 +2,10 @@
 --  "Medusa" awesome theme     --
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
-require("configs")
-require("actions")
+local configs = require "configs"
+local actions = require "actions"
 require("palette")
+local utils = require "utils"
 
 -- {{{ Main
 
@@ -12,14 +13,25 @@ theme = {}
 theme.name       = "Medusa"
 theme.path       = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
 theme.configs    = {
+   -- Здесь содержатся все конфиги, которые нужно модифицировать синхронно с темой
    gtk     = {
-      file = os.getenv("HOME") .. "/.gtkrc-2.0",
-      func = configs.getGTKrcString
+
+      -- Таблица, содержащая все файлы, которые нужно модифицировать в данном конфиге
+      files = { os.getenv("HOME") .. "/.gtkrc-2.0" },
+
+      -- Все функции (по порядку), которые нужно вызвать для применения конфига.
+      -- В каждую функцию передаётся таблица данного конфига (т.е. в данном случае theme.configs.gtk).
+      funcs = { configs.createGTKrcString, actions.writeFiles },
+
+      -- В этой таблице содержатся данные, необходимые указанным выше функциям (см. ниже)
+      data  = {},
+      strings = {}
    },
    xcolors = {
-      file  = os.getenv("HOME") .. "/.Xcolors",
-      func  = configs.getXcolorsString,
-      apply = configs.xcolorsApply
+      files   = { os.getenv("HOME") .. "/.Xcolors" },
+      funcs   = { configs.createXcolorsString, actions.writeFiles, configs.xcolorsApply },
+      data    = {},
+      strings = {}
    }
 }
 
@@ -201,12 +213,9 @@ theme.configs.xcolors.data = {
    ["color15"] = "#ffffff",
 }
 
-for k, v in pairs(theme.configs) do
-   replaceFile(v.file, v.func(v.data))
-   if v.apply ~= nil then
-      if k == xcolors then
-	 print(v.apply(v.file))
-      end
+for cfgname, cfg in pairs(theme.configs) do
+   for i, fun in pairs(cfg.funcs) do
+      fun(cfg)
    end
 end
 
