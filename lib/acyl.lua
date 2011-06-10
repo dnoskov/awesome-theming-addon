@@ -1,43 +1,44 @@
-module(..., package.seeall)
+require 'lfs'
+require 'pl'
+local acyl       = {
+   test = {
+      files = {},
+      path = { os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3" },
+      patterns = { ".+svg$", ".+png$"},
+   }
+}
 
-acyl       = {}
-acyl.files = {}
-
--- находит в директории path все файлы (не симлинки), соответствующие
--- шаблону pattern и возвращает их список
-function acyl.files.append (path, pattern)	
-   for file in lfs.dir(path) do
-      if file ~= "." and file ~= ".." then
-	 local pf = path .. "/" .. file
-	 attrs = lfs.symlinkattributes (pf)
-	 if attrs.mode == "directory" then
-	    list:refresh(pf, pattern)
-	 elseif attrs.mode == "file" and string.match(file, pattern) then
-	    table.insert(list.files, pf)
+-- находит в директории cfg.path все файлы (не симлинки), соответствующие
+-- каждому шаблону cfg.patterns и записывает в таблицу cfg.files полученный
+-- список файлов
+function acyl.appendFiles (cfg)
+   local function getlist (pth, ptn)
+      for filename in lfs.dir(pth) do
+	 if filename ~= "." and filename ~= ".." then
+	    local fpath = pth .. "/" .. filename
+	    local attr = lfs.symlinkattributes(fpath)
+	    assert (type(attr) == "table")
+	    if attr.mode == "directory" then
+	       getlist(fpath, ptn)
+	    elseif attr.mode == "file" then
+	       if string.match(filename, ptn) then
+		  table.insert(cfg.files, fpath)
+	       end
+	    end
 	 end
       end
    end
+
+   for ipath in List.iter(cfg.path) do
+      for patrn in List.iter(cfg.patterns) do
+	 getlist(ipath, patrn)
+      end
+   end   
 end
 
-function acyl.replaceSettings (xmlfile, xmlstring)
-   xmldata = ""
-   for line in io.lines(xmlfile) do xmldata = xmldata .. line .. "\n" end
-   callbacks = {
-      StartElement  = function (parser, name, attr)
-			 if name == "acyl-settings" then
-			    io.write(name .. " starts\n")
-			 end
-		      end,
-      EndElement    = function (parser, name)
-			 if name == "acyl-settings" then
-			    io.write(name .. " stops\n")
-			 end
-		      end,
-      CharacterData = function (parser, string)
-		      end
-   }
-   p = lxp.new(callbacks)
-   p:parse(xmldata)
+function acyl.resetFileList (cfg)
+   cfg.files = {}
 end
 
+return acyl
 
