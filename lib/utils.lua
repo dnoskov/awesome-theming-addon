@@ -46,4 +46,8 @@ function utils.orderedPairs(t)
     return utils.orderedNext, t, nil
 end
 
+function utils.trim(s)
+  return s:match"^%s*(.*)":match"(.-)%s*$"
+end
+
 return utils
