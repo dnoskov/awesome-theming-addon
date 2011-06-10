@@ -21,4 +21,31 @@ function actions.writeFiles (cfg)
    end
 end
 
+-- Выплняет xrdb -merge для каждого файла конфигурации
+function actions.XRDBmerge (cfg)
+   for num, cfgfile in pairs(cfg.files) do
+      io.write("Attempting to update XRDB with " .. cfgfile .. " ... ")
+      local cmd = "xrdb -merge " .. cfgfile
+      io.write("\nExecuting " .. cmd)
+      awful.util.spawn_with_shell(cmd)
+      io.write(" ... Done.\n")
+   end
+end
+
+-- Экспортирует переменные окружения (не тестировалось)
+function actions.exportEnv (cfg)
+   if cfg.env then
+      io.write("Exporting environment ... \n")
+      for name, value in pairs(cfg.env) do
+	 cmd = "export " .. name .. "=" .. value
+	 awful.utils.spawn_with_shell(cmd)
+	 io.write("    "name .. " = " .. value .. "\n")
+      end
+      io.write("... Done.\n")
+   else
+      io.write("Nothing to export.\n")
+   end
+end
+
+
 return actions
