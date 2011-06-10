@@ -7,9 +7,9 @@ Columns: 1
 52	113	139	stratos3
 108	170	191	stratos4
 22	20	30	black russian
-27	30	33	bunker
+27	30	33	bunker, bg_normal
 49	55	58	gunmetal
-72	77	77	dark slate
+72	77	77	dark slate, fg_normal
 121	123	119	stack
 99	114	135	bismark
 137	149	168	bali hai

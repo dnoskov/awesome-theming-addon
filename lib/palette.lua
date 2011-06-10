@@ -1,29 +1,32 @@
-require("lxp")
-require("lfs")
+require("colors")
+local utils = require "utils"
+local palette = {}
 
-
-function parsepalette(palettefile)
-   local colors = {}
+function palette.parse (palettefile)
+   local clrs = {}
    
    for cline in io.lines(palettefile) do
       if string.find(cline, "%d+%s+%d+%s+%d+") then
 	 
-	 local colorstring = string.match(cline, "%d+%s+%d+%s+%d+")
-	 local colorpartials = {}
-	 local colorname = ""
+	 local clrstring = string.match(cline, "%d+%s+%d+%s+%d+")
+	 local clrpartials = {}
+	 local clrname = ""
 	 
-	 for colorpartial in string.gmatch(colorstring, "%d+") do
-	    table.insert(colorpartials, string.format("%x", colorpartial))
+	 for clrpartial in string.gmatch(clrstring, "%d+") do
+	    table.insert(clrpartials, string.format("%x", clrpartial))
 	 end
 	 
-	 colorname = string.match(cline, "%a+[^%c]+")
-	 colors[colorname] = "#" .. colorpartials[1] .. colorpartials[2] .. colorpartials[3]
+	 clrnamestring = string.match(cline, "%a[^%c]+")
+	 clrstring = "#" .. clrpartials[1] .. clrpartials[2] .. clrpartials[3]
+	 for clrname in string.gmatch(clrnamestring, "[^,]+") do
+	    clrs[utils.trim(clrname)] = colors.new(clrstring)
+	 end
       end
    end
    
-   return colors     
+   return clrs     
 end
 
 
 
-module("palette")
+return palette

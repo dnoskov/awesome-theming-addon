@@ -4,7 +4,7 @@
 ---------------------------------
 local configs = require "configs"
 local actions = require "actions"
-require("palette")
+local palette = require "palette"
 local utils = require "utils"
 
 -- {{{ Main
@@ -13,23 +13,23 @@ theme = {}
 theme.name       = "Medusa"
 theme.path       = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
 theme.configs    = {
-   -- Здесь содержатся все конфиги, которые нужно модифицировать синхронно с темой
+   -- Здесь содержатся все конфигурации, которые нужно модифицировать синхронно с темой
    gtk     = {
 
-      -- Таблица, содержащая все файлы, которые нужно модифицировать в данном конфиге
+      -- Таблица, содержащая все файлы, которые нужно модифицировать в данной конфигурации
       files = { os.getenv("HOME") .. "/.gtkrc-2.0" },
 
       -- Все функции (по порядку), которые нужно вызвать для применения конфига.
       -- В каждую функцию передаётся таблица данного конфига (т.е. в данном случае theme.configs.gtk).
       funcs = { configs.createGTKrcString, actions.writeFiles },
 
-      -- В этой таблице содержатся данные, необходимые указанным выше функциям (см. ниже)
+      -- В этой таблице содержатся настройки конфигурации, необходимые указанным выше функциям (см. ниже)
       data  = {},
       strings = {}
    },
    xcolors = {
       files   = { os.getenv("HOME") .. "/.Xcolors" },
-      funcs   = { configs.createXcolorsString, actions.writeFiles, configs.xcolorsApply },
+      funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBMerge },
       data    = {},
       strings = {}
    }
@@ -43,7 +43,7 @@ theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.jpg" }
 theme.font      = "Monospace 8"
 
 -- {{{ Colors
-theme.colors    = parsepalette(theme.path .. "/palette.gpl" )
+theme.colors    = palette.parse(theme.path .. "/palette.gpl" )
 local c = theme.colors
 
 theme.fg_normal = c["pattens blue"]
