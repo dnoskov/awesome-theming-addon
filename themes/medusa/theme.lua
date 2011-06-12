@@ -6,6 +6,7 @@ local configs = require "configs"
 local actions = require "actions"
 local palette = require "palette"
 local utils = require "utils"
+require 'colors'
 
 -- {{{ Main
 
@@ -29,7 +30,7 @@ theme.configs    = {
    },
    xcolors = {
       files   = { os.getenv("HOME") .. "/.Xcolors" },
-      funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBMerge },
+      funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBmerge },
       data    = {},
       strings = {}
    }
@@ -43,7 +44,11 @@ theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.jpg" }
 theme.font      = "Monospace 8"
 
 -- {{{ Colors
-theme.colors    = palette.parse(theme.path .. "/palette.gpl" )
+theme.colorobjects    = palette.parse(theme.path .. "/palette.gpl" )
+theme.colors = {}
+for clrname, clrobj in pairs(theme.colorobjects) do
+   theme.colors[clrname] = tostring(clrobj)
+end
 local c = theme.colors
 
 theme.fg_normal = c["pattens blue"]
@@ -194,8 +199,8 @@ theme.configs.xcolors.data = {
    ["color1"] = c["rouge"],
    ["color9"] = c["zest"],
    -- green
-   ["color2"] = c["kaitoke green"],
-   ["color10"] = c["fruit salad"],
+   ["color2"] = c["fruit salad"],
+   ["color10"] = c["celery"],
    -- brown/yellow
    ["color3"] = c["nugget"],
    ["color11"] = c["Dark Khaki"],
