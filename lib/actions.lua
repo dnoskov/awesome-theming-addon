@@ -1,4 +1,3 @@
-
 local actions = {}
 
 local test = {
@@ -39,13 +38,12 @@ function actions.exportEnv (cfg)
       for name, value in pairs(cfg.env) do
 	 cmd = "export " .. name .. "=" .. value
 	 awful.utils.spawn_with_shell(cmd)
-	 io.write("    "name .. " = " .. value .. "\n")
+	 io.write("    " .. name .. " = " .. value .. "\n")
       end
       io.write("... Done.\n")
    else
       io.write("Nothing to export.\n")
    end
 end
-
 
 return actions
