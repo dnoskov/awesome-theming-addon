@@ -1,4 +1,5 @@
 require("awful.util")
+require 'colors'
 local utils = require "utils"
 
 local configs = {
@@ -66,11 +67,11 @@ function configs.createGTKrcString (cfg)
       if k == "gtk_color_scheme" then
 	 scheme = k .. " =\""
 	 for m, n in pairs(v) do
-	    scheme = scheme .. m .. ":" .. n .. "\\n"
+	    scheme = scheme .. m .. ":" .. tostring(n) .. "\\n"
 	 end
 	 scheme = scheme .. k .. "\"\n"
       else
-	 cfgstr = cfgstr .. k .. " = " .. v .. "\n"
+	 cfgstr = cfgstr .. k .. " = " .. tostring(v) .. "\n"
       end
    end
    cfg.strings = { cfgstr .. scheme }
@@ -81,7 +82,7 @@ end
 function configs.createXcolorsString (cfg)
    cfgstr = ""
    for k, v in pairs(cfg.data) do
-      cfgstr = cfgstr .. "*" .. k .. ":" .. v .. "\n"
+      cfgstr = cfgstr .. "*" .. k .. ":" .. tostring(v) .. "\n"
    end
    cfg.strings = { cfgstr }
 end
