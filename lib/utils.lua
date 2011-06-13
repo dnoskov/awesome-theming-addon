@@ -50,4 +50,9 @@ function utils.trim(s)
   return s:match"^%s*(.*)":match"(.-)%s*$"
 end
 
+function exists(fname)
+   local f = io.open(fname, "r")
+   if (f and f:read()) then return true end
+end
+
 return utils

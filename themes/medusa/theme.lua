@@ -6,6 +6,7 @@ local configs = require "configs"
 local actions = require "actions"
 local palette = require "palette"
 local utils = require "utils"
+local acyl = require 'acyl'
 require 'colors'
 
 -- {{{ Main
@@ -33,6 +34,24 @@ theme.configs    = {
       funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBmerge },
       data    = {},
       strings = {}
+   },
+   acyl = {
+      icons = {},
+      links = {},
+      paths = { 
+	 source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
+	 dest = theme.path .. "/icons",
+	 symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
+      },
+      patterns = { ".+svg$", ".+png$"},
+      index = {
+	 Icon_Theme = {
+	    Name = "awesome-icon-theme"
+	 }
+      },
+      data = {},
+      funcs = { acyl.maintainIcons }
+      -- funcs = {}
    }
 }
 
@@ -172,7 +191,7 @@ theme.configs.gtk.data = {
       ["tooltip_fg_color:"]  = theme.fg_normal,
       ["tooltip_bg_color:"]  = theme.bg_focus,
    },
-   ["gtk-icon-theme-name"]   = '"ACYL_Icon_Theme_0.9.3"',
+   ["gtk-icon-theme-name"]   = '"' .. theme.configs.acyl.index.Icon_Theme.Name .. '"',
    ["gtk-font-name"]         = "\"" .. theme.font .. "\"",
    ["gtk-cursor-theme-name"] = '"OpenZone_Black_Slim"',
    ["gtk-cursor-theme-size"] = 0,
@@ -217,6 +236,67 @@ theme.configs.xcolors.data = {
    ["color7"] = c["pattens blue"],
    ["color15"] = "#ffffff",
 }
+
+
+theme.configs.acyl.data = {
+   ['all'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = theme.fg_normal
+   },
+   ['real_icons/places/folder.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/application-s-gnome-saved-search.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-bookmarks.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-documents.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-download.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder_home.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-locked.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-music.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-new.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-open.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/folder-pictures.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["Dark Khaki"]
+   },
+   ['real_icons/places/desktop.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["stratos3"]
+   },
+   ['real_icons/places/distributor-logo.svg'] = {
+      template = theme.path .. "/icons/one_color_flat.xml",
+      color = c["stratos3"]
+   },
+}
+
 
 for cfgname, cfg in pairs(theme.configs) do
    for i, fun in pairs(cfg.funcs) do
