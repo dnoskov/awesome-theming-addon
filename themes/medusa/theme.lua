@@ -43,15 +43,24 @@ theme.configs    = {
 	 dest = theme.path .. "/icons",
 	 symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
       },
-      patterns = { ".+svg$", ".+png$"},
+      patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
       index = {
 	 Icon_Theme = {
 	    Name = "awesome-icon-theme"
 	 }
       },
+      settings = {
+	 alternatives = {
+	    folders = "acyl_2",
+	    logos = { "arch", 
+	       "real_icons/apps/checkbox-gtk.svg", "real_icons/places/distributor-logo.svg", "real_icons/apps/start-here.svg"
+	    },
+	    navigation = "moblin"
+	 },
+	 applications = { }
+      },
       data = {},
-      funcs = { acyl.maintainIcons }
-      -- funcs = {}
+      funcs = { acyl.Apply }
    }
 }
 
@@ -237,65 +246,31 @@ theme.configs.xcolors.data = {
    ["color15"] = "#ffffff",
 }
 
-
-theme.configs.acyl.data = {
-   ['all'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = theme.fg_normal
-   },
-   ['real_icons/places/folder.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/application-s-gnome-saved-search.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-bookmarks.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-documents.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-download.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder_home.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-locked.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-music.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-new.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-open.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/folder-pictures.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["Dark Khaki"]
-   },
-   ['real_icons/places/desktop.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["stratos3"]
-   },
-   ['real_icons/places/distributor-logo.svg'] = {
-      template = theme.path .. "/icons/one_color_flat.xml",
-      color = c["stratos3"]
-   },
+local t = {
+   ["one color flat"] = theme.path .. "/icons/one_color_flat.xml"
 }
+theme.configs.acyl.data = {
+	 [1] = { 
+	    patterns = { ".+" },
+	    template = t["one color flat"],
+	    variables = { color = theme.fg_normal }
+	 },
+	 [2] = {
+	    patterns = { ".+folder.+" },
+	    template = t["one color flat"],
+	    variables = { color = c["Dark Khaki"] }
+	 },
+	 [3] = {
+	    patterns = { ".+alternative_icons/logos/.+" },
+	    template = t["one color flat"],
+	    variables = { color = c["stratos4"] }
+	 },
+	 [4] = {
+	    patterns = { ".+navigation.+back.+", ".+navigation.+forward.+" },
+	    template = t["one color flat"],
+	    variables = { color = c["stratos3"]}
+	 }
+      }
 
 
 for cfgname, cfg in pairs(theme.configs) do

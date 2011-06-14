@@ -11,6 +11,7 @@ package.path = package.path .. ";" .. table.concat(rcpath, ";")
 
 -- Theme handling library
 require("beautiful")
+local acyl = require 'acyl'
 -- Notification library
 require("naughty")
 -- Tag management

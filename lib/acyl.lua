@@ -1,182 +1,212 @@
 require 'lfs'
 require 'pl'
 stringx.import()
-require 'vardump'
 local posix = require 'posix'
 
 
 local acyl = {
    test = {
       icons = {},
-      links = {},
       paths = { 
 	 source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
-	 dest = "/home/dnoskov/.config/awesome/themes/medusa/icons",
-	 symlinkto = "/home/dnoskov/.icons/awesome-icon-theme"
+	 dest = "/home/dnoskov/.config/awesome/themes/medusa/test",
+	 symlinkto = "/home/dnoskov/.icons/awesome-icon-theme-test"
       },
-      patterns = { ".+svg$", ".+png$"},
+      patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
       index = {
 	 Icon_Theme = {
 	    Name = "awesome-icon-theme"
 	 }
       },
-      data = {
-	 ['all'] = {
-	    template = "/home/dnoskov/.config/awesome/themes/medusa/icons/one_color_flat.xml",
-	    color = "#00AAFF"
+      settings = {
+	 alternatives = {
+	    folders = "acyl_1",
+	    logos = { "fedora", 
+	       "real_icons/apps/checkbox-gtk.svg", "real_icons/places/distributor-logo.svg", "real_icons/apps/start-here.svg"
+	    },
+	    navigation = "moblin"
 	 },
-	 ['real_icons/actions/Close.svg'] = {
+	 applications = { }
+      },
+      data = {
+	 [1] = { 
+	    patterns = { ".+" },
 	    template = "/home/dnoskov/.config/awesome/themes/medusa/icons/one_color_flat.xml",
-	    color = "#FF0000"
+	    variables = { color = "#00AAFF" }
+	 },
+	 [2] = {
+	    patterns = { ".+folder.+" },
+	    template = "/home/dnoskov/.config/awesome/themes/medusa/icons/one_color_flat.xml",
+	    variables = { color = "#aaAA00" }
+	 },
+	 [3] = {
+	    patterns = { ".+real_icons/actions/Close%.svg" },
+	    template = "/home/dnoskov/.config/awesome/themes/medusa/icons/one_color_flat.xml",
+	    variables = { color = "#FF0000" }
 	 }
       }
    }
 }
 
-function acyl.maintainIcons (cfg)
-   -- esc(str) экранирует символы ^$()%.*+-? в строке str
-   local function esc(str)
-      res = ""
-      for char in List.iter(str) do
-	 if string.match(char, "[%^%$%(%)%%%.%[%]%*%+%-%?]") then
-	    res = res .. "%" .. char
-	 else res = res .. char end
-      end
-      return res
-   end
-
-   -- convertdots(fpath, lpath) - преобразует относительный путь fpath в абсолютный,
-   -- исходя из того, что этот путь задан относительно пути lpath
-   local function convertdots(fpath, lpath)
-      fpathtab = string.gsub(fpath, esc(path.basename(fpath)), ""):split("/")
-      lpathtab = string.gsub(lpath, esc(path.basename(lpath)), ""):split("/")
-      for it in List.iter(fpathtab) do
-	 if it == ".." then
-	    table.remove(lpathtab)
-	 end
-      end
-      table.remove(fpathtab, 1)
-      res = table.concat(lpathtab, "/") .. "/" ..  table.concat(fpathtab, "/") .. "/" .. path.basename(fpath)
-      return res
-   end
-
-   -- Заполнение cfg.icons и сfg.links
-   local function getlist (pth, ptn)
-      for sourcefn in lfs.dir(pth) do
-	 if sourcefn ~= "." and sourcefn ~= ".." then
-	    local fpath = pth .. "/" .. sourcefn
-	    local attr = lfs.symlinkattributes(fpath)
-	    assert (type(attr) == "table")
-	    
-	    if attr.mode == "directory" then
-	       getlist(fpath, ptn)
-	    
-	    elseif attr.mode == "file" then
-	       if string.match(sourcefn, ptn) then
-		  if cfg.icons[fpath] == nil then
-		     cfg.icons[fpath] = {}
-		  end
-	       end
-	    
-	    elseif attr.mode == "link" then
-	       if string.match(sourcefn, ptn) then
-		  local linkattr = lfs.attributes(fpath)
-		  assert (type(linkattr) == "table")
-		  local fname = posix.readlink(fpath)
-		  fname = convertdots(fname, fpath)
-		  if cfg.icons[fname] == nil then
-		     cfg.icons[fname] = {}
-		  end 
-		  table.insert(cfg.icons[fname], fpath)
+local function getIcons (pth, ptn, tab)
+   tab = tab or {}
+   for sfn in lfs.dir(pth) do
+      if sfn ~= "." and sfn ~= ".." then
+	 local fp = pth .. "/" .. sfn
+	 local attr = lfs.symlinkattributes(fp)
+	 assert (type(attr) == "table")
+	 
+	 if attr.mode == "directory" then
+	    getIcons(fp, ptn, tab)
+	 else
+	    if string.match(sfn, ptn) then
+	       if attr.mode == "file" then
+		  if tab[fp] == nil then tab[fp] = {} end
+	       elseif attr.mode == "link" then
+		  local ltn = expandDots(posix.readlink(fp), fp)
+		  if tab[ltn] == nil then tab[ltn] = {} end
+		  table.insert(tab[ltn], fp)
 	       end
 	    end
 	 end
       end
    end
+end
 
-   for pattern in List.iter(cfg.patterns) do
-      getlist(cfg.paths.source, pattern)
+function expandDots (relpath, abspath)
+   rptab = relpath:split("/")
+   aptab = string.gsub(abspath, 
+		       utils.escape("/"..path.basename(abspath)), 
+		       ""):split("/")
+   for i, part in pairs(rptab) do
+      if part == ".." then
+	 table.remove(aptab)
+	 table.remove(rptab, i)
+      elseif part == "." then
+	 table.remove(rptab, i)
+      end
    end
-   -- cfg.icons заполнена
+   return table.concat(aptab, "/") .. "/" .. table.concat(rptab, "/")
+end
 
-   -- Создание структуры директорий
-   for icon, links in pairs(cfg.icons) do
-      pth = string.gsub(string.gsub(icon, esc(cfg.paths.source), cfg.paths.dest), esc(path.basename(icon)), "")
-      if not path.exists(pth) then dir.makepath(pth) end
+function createPaths (icons, paths)
+    for icon, links in pairs(icons) do
+      ip = string.gsub(string.gsub(icon, 
+				    utils.escape(paths.source), 
+				    paths.dest), 
+			utils.escape("/"..path.basename(icon)), 
+			"")
+      if not path.exists(ip) then dir.makepath(ip) end
       for link in List.iter(links) do
-	 lpath = string.gsub(string.gsub(link, esc(cfg.paths.source), cfg.paths.symlinkto), "/"..esc(path.basename(link)), "")
-	 if not path.exists(lpath) then dir.makepath(lpath) end
+	 lp = string.gsub(string.gsub(link,
+				      utils.escape(paths.source),
+				      paths.dest), 
+			  utils.escape("/"..path.basename(link)),
+			  "")
+	 if not path.exists(lp) then dir.makepath(lp) end
       end
    end
+end
 
-   -- Запись иконок
-   for srcIcon, iconLinks in pairs(cfg.icons) do
-      iconRelativeName = string.gsub(srcIcon, cfg.paths.source.."/scalable/", "")
-      -- Выбор шаблона
-      tpl = text.Template(utils.readfile(cfg.data['all'].template))
-      replStr = "<acyl-settings>\n"..tpl:substitute(cfg.data['all']).."\n</acyl-settings>\n"
-      if cfg.data[iconRelativeName] ~= nil then
-	 print("match!")
-	 tpl = text.Template(utils.readfile(cfg.data[iconRelativeName].template))
-	 replStr = "<acyl-settings>\n"..tpl:substitute(cfg.data[iconRelativeName]).."\n</acyl-settings>\n"
-      end
-      srcStr = utils.readfile(srcIcon)
-      destStr = string.gsub(srcStr, "<acyl%-settings>.*</acyl%-settings>", replStr)
+function redrawIcons (icons, paths, data)
+   for si, sil in pairs(icons) do
+      sirn = string.gsub(si, paths.source.."/scalable/", "")
+      di = string.gsub(si, utils.escape(paths.source), paths.dest)
 
-      -- Задание пути и запись файла
-      iconRelativePath = string.gsub(iconRelativeName, esc("/"..path.basename(iconRelativeName)), "")
-      destPath = cfg.paths.dest .. "/scalable/" .. iconRelativePath
-      if not path.exists(destPath) then
-   	 io.write("Attempting to create path ... " .. destPath)
-   	 dir.makepath(destPath)
-   	 io.write("Done.\n")
-      end
-      destIcon = string.gsub(srcIcon, cfg.paths.source, cfg.paths.dest)
-      utils.writefile(destIcon, destStr)
-      if string.match(srcIcon, "folder") then
-	 local file = "/home/dnoskov/acyllog"
-	 local str = ""
-	 if path.exists(file) then
-	    str = utils.readfile(file)
+      for i, sett in ipairs(data) do
+	 for i, pat in ipairs(sett.patterns) do
+	    if string.match(di, pat) or string.match(path.basename(di), pat) then
+	       tpl = text.Template(utils.readfile(sett.template))
+	       rs = "<acyl-settings>\n" .. tpl:substitute(sett.variables) .. "</acyl-settings>\n"
+	    end
 	 end
-	 str = str .. srcIcon .. "\n" .. pretty.write(iconLinks) .. replStr
-	 utils.writefile(file, str)
       end
+      
+      ss = utils.readfile(si)
+      ds = string.gsub(ss, "<acyl%-settings>.*</acyl%-settings>", rs)
+
+      sirp = string.gsub(sirn, utils.escape("/"..path.basename(sirn)), "")
+      dp = paths.dest .. "/scalable/" .. sirp
+      if not path.exists(dp) then
+   	 dir.makepath(dp)
+      end
+      utils.writefile(di, ds)
    end
+end
 
-   -- Создание индекса темы иконок (index.theme)
-   -- local function genindex (indexOrig, indexConfig)
-   --    for iI1, iC1 in pairs(indexOrig) do
-   -- 	 for iI2, iC2 in pairs(indexConfig) do
-   -- 	    if iI1 == iI2 then 
-   -- 	       if type(iC1) == type(iC2) then 
-   -- 		  if type(iC1) == "table" and type(iC2) == "table" then
-   -- 		     genindex(iC1, iC2)
-   -- 		  else
-   -- 		     indexOrig[iI1] = iC2
-   -- 		  end
-   -- 	       else print("Type mismatch! Skipping index generation.") end
-   -- 	    end
-   -- 	 end
-   --    end
-   -- end
-   -- Нормальную генерацию индекса сделаю потОм!
-
-   index = utils.readfile(cfg.paths.source .. "/index.theme")
-   index = string.gsub(index, "Name=AnyColorYouLike", "Name="..cfg.index.Icon_Theme.Name)
-   utils.writefile(cfg.paths.dest .. "/index.theme", index)
-
-
-   -- Создание симлинков
-   dir.copyfile(cfg.paths.dest .. "/index.theme", cfg.paths.symlinkto .. "/index.theme")
-   for icon, links in pairs(cfg.icons) do
-      local srcLinkPath = string.gsub(icon, esc(cfg.paths.source), cfg.paths.dest)
+function symLink (icons, paths)
+   for icon, links in pairs(icons) do
+      local slp = string.gsub(icon, utils.escape(paths.source), paths.dest)
       for link in List.iter(links) do
-	 trgLinkPath = string.gsub(link, esc(cfg.paths.source), cfg.paths.symlinkto)
-	 posix.link(srcLinkPath, trgLinkPath, true)
+	 local tlp = string.gsub(link, utils.escape(paths.source), paths.dest)
+	 posix.link(slp, tlp, true)
       end      
    end
-   
+   posix.link(paths.dest, paths.symlinkto, true)
+end
+
+function rebase (bpath, nbpath)
+   if not path.exists(nbpath) then
+      dir.makepath(nbpath)
+   end
+   for file in lfs.dir(bpath) do
+      if file ~= "." and file ~= ".." then
+	 local fp = bpath .. "/" .. file
+	 local nfp = nbpath .. "/" .. file
+	 local attr = lfs.attributes(fp)
+	 assert(type(attr)=="table")
+	 if attr.mode == "directory" then
+	    if not path.exists(nfp) then
+	       dir.makepath(nfp)
+	    end
+	    rebase (fp, nfp)
+	 else
+	    dir.copyfile(fp, nfp)
+	 end
+      end
+   end
+end
+
+function applySettings (settings, paths)
+   dp = paths.dest .. "/scalable/"
+   for sett, op in pairs(settings) do
+      if sett == "alternatives" then
+	 for alt, sel in pairs(op) do
+	    altpath = dp .. "alternative_icons/" .. alt
+	    if alt == "folders" then
+	       local bpath = altpath .. "/" .. sel
+	       local nbpath = dp .. "real_icons"
+	       rebase(bpath, nbpath)
+	    elseif alt == "logos" then
+	       for i, l in ipairs(sel) do
+		  if i ~= 1 then
+		     dir.copyfile(altpath .. "/" .. sel[1], dp .. sel[i])
+		  end
+	       end
+	    elseif alt == "navigation" then
+	       local bpath = altpath .. "/" .. sel
+	       local nbpath = dp .. "real_icons/actions"
+	       rebase(bpath, nbpath)
+	    end
+	 end
+      end
+   end
+end
+
+function genIndex (index, paths)
+   idxf = utils.readfile(paths.source .. "/index.theme")
+   utils.writefile(paths.dest .. "/index.theme", string.gsub(idxf, "AnyColorYouLike", index.Icon_Theme.Name))
+end
+
+function acyl.Apply (cfg)
+   for pattern in List.iter(cfg.patterns) do
+      getIcons (cfg.paths.source, pattern, cfg.icons)
+   end
+   createPaths   (cfg.icons, cfg.paths)
+   redrawIcons   (cfg.icons, cfg.paths, cfg.data)
+   applySettings (cfg.settings, cfg.paths)
+   symLink       (cfg.icons, cfg.paths)
+   genIndex      (cfg.index, cfg.paths)
 end
 
 return acyl
