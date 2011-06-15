@@ -60,7 +60,8 @@ theme.configs    = {
 	 applications = { }
       },
       data = {},
-      funcs = { acyl.Apply }
+      -- funcs = { acyl.Apply }
+      funcs = { }
    }
 }
 

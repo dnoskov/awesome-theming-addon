@@ -8,8 +8,11 @@ local acyl = {
    test = {
       icons = {},
       paths = { 
+	 -- Место, где установлена тема иконок ACYL
 	 source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
+	 -- Место, куда будет записана перекрашенная тема
 	 dest = "/home/dnoskov/.config/awesome/themes/medusa/test",
+	 -- Место, куда будет создан симлинк на тему, которая находится в paths.dest
 	 symlinkto = "/home/dnoskov/.icons/awesome-icon-theme-test"
       },
       patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
