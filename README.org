@@ -30,8 +30,11 @@
     - [[http://keplerproject.github.com/luafilesystem/][lfs]]
     - [[http://luaforge.net/projects/luaposix/][luaposix]]
     - [[http://sputnik.freewisdom.org/lib/colors/][colors]] - лежит в lib/colors.lua, за документацией обращайтесь по ссылке
+    - [[http://pobtott.deviantart.com/art/Any-Color-You-Like-175624910][acyl]] - перекрашиваемая тема иконок
 
     Некоторые из них устанавливаются с помощью luarocks
+
+
 
 *** Как это должно работать на первом этапе
     При инициализации темы awesome читается файл палитры GIMP, содержащий цвета, которые будут использованы в теме awesome и в настройках разных программ, определяемых в файле темы awesome особым образом.
