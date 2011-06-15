@@ -1,2 +1,5 @@
 themes/*/icons/*
+#*
+*#
+*~
 !.gitignore

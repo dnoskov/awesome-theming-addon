@@ -119,8 +119,10 @@ function redrawIcons (icons, paths, data)
       for i, sett in ipairs(data) do
 	 for i, pat in ipairs(sett.patterns) do
 	    if string.match(di, pat) or string.match(path.basename(di), pat) then
-	       tpl = text.Template(utils.readfile(sett.template))
-	       rs = "<acyl-settings>\n" .. tpl:substitute(sett.variables) .. "</acyl-settings>\n"
+	       if path.exists(sett.template) then
+		  tpl = text.Template(utils.readfile(sett.template))
+		  rs = "<acyl-settings>\n" .. tpl:substitute(sett.variables) .. "</acyl-settings>\n"
+	       else print("FAIL: Template "..sett.template.." not found") end
 	    end
 	 end
       end
@@ -131,6 +133,7 @@ function redrawIcons (icons, paths, data)
       sirp = string.gsub(sirn, utils.escape("/"..path.basename(sirn)), "")
       dp = paths.dest .. "/scalable/" .. sirp
       if not path.exists(dp) then
+	 print(dp .. " not exist. Attempting to create.")
    	 dir.makepath(dp)
       end
       utils.writefile(di, ds)
@@ -145,7 +148,10 @@ function symLink (icons, paths)
 	 posix.link(slp, tlp, true)
       end      
    end
-   posix.link(paths.dest, paths.symlinkto, true)
+   if path.exists(paths.symlinkto) then 
+      posix.unlink(paths.symlinkto)
+   end
+      posix.link(paths.dest, paths.symlinkto, true)
 end
 
 function rebase (bpath, nbpath)
@@ -204,12 +210,27 @@ end
 function acyl.Apply (cfg)
    for pattern in List.iter(cfg.patterns) do
       getIcons (cfg.paths.source, pattern, cfg.icons)
+      print("getIcons for " .. pattern .. " DONE.")
    end
+   io.write("createPaths .. ")
    createPaths   (cfg.icons, cfg.paths)
+   io.write("DONE.\n")
+
+   io.write("redrawIcons .. ")
    redrawIcons   (cfg.icons, cfg.paths, cfg.data)
+   io.write("DONE.\n")
+
+   io.write("applySettings .. ")
    applySettings (cfg.settings, cfg.paths)
+   io.write("DONE.\n")
+
+   io.write("symLink .. ")
    symLink       (cfg.icons, cfg.paths)
+   io.write("DONE.\n")
+
+   io.write("genIndex .. ")
    genIndex      (cfg.index, cfg.paths)
+   io.write("DONE.\n")
 end
 
 return acyl

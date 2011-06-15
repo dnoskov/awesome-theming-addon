@@ -1,18 +1,19 @@
 ---------------------------------
---  "Medusa" awesome theme     --
+--  "Aurora" awesome theme     --
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
 local configs = require "configs"
 local actions = require "actions"
 local palette = require "palette"
-local utils = require "utils"
+-- local utils = require "utils"
 local acyl = require 'acyl'
 require 'colors'
+require 'pl'
 
 -- {{{ Main
 
 theme = {}
-theme.name       = "Medusa"
+theme.name       = "Aurora"
 theme.path       = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
 theme.configs    = {
    -- Здесь содержатся все конфигурации, которые нужно модифицировать синхронно с темой
@@ -61,6 +62,7 @@ theme.configs    = {
       },
       data = {},
       funcs = { acyl.Apply }
+      -- funcs = { }
    }
 }
 
@@ -73,18 +75,20 @@ theme.font      = "Monospace 8"
 
 -- {{{ Colors
 theme.colorobjects    = palette.parse(theme.path .. "/palette.gpl" )
+utils.writefile("/home/dnoskov/colors.current", pretty.write(theme.colorobjects))
 theme.colors = {}
 for clrname, clrobj in pairs(theme.colorobjects) do
    theme.colors[clrname] = tostring(clrobj)
 end
 local c = theme.colors
 
-theme.fg_normal = c["pattens blue"]
-theme.fg_focus  = c["stratos4"]
-theme.fg_urgent = c["pattens blue"]
-theme.bg_normal = c["gunmetal"]
-theme.bg_focus  = c["bunker"]
-theme.bg_urgent = c["stratos3"]
+
+theme.fg_normal = c["fg_normal"]--
+theme.fg_focus  = c["fg_focus"]--
+theme.fg_urgent = c["fg_urgent"]--
+theme.bg_normal = c["bg_normal"]--
+theme.bg_focus  = c["bg_focus"]--
+theme.bg_urgent = c["bg_urgent"]--
 -- }}}
 
 
@@ -191,14 +195,14 @@ theme.layout_floating   = theme.path .. "/layouts/floating.png"
 theme.configs.gtk.data = {
    ["gtk-theme-name"]        = '"Termlike"',
    ["gtk_color_scheme"] = {
-      ["fg_color"]          = theme.fg_normal,
-      ["bg_color"]          = theme.bg_focus,
-      ["base_color"]        = c["dark slate"],
-      ["text_color"]        = theme.fg_normal,
-      ["selected_bg_color"] = theme.fg_focus,
-      ["selected_fg_color"] = theme.bg_focus,
-      ["tooltip_fg_color"]  = theme.fg_normal,
-      ["tooltip_bg_color"]  = theme.bg_focus,
+      ["fg_color"]          = c["gtk_fg_color"],--
+      ["bg_color"]          = c["gtk_bg_color"],--
+      ["base_color"]        = c["gtk_base_color"],--
+      ["text_color"]        = c["gtk_text_color"],--
+      ["selected_bg_color"] = c["gtk_selected_bg_color"],--
+      ["selected_fg_color"] = c["gtk_selected_fg_color"],--
+      ["tooltip_fg_color"]  = c["gtk_tooltip_fg_color"],--
+      ["tooltip_bg_color"]  = c["gtk_tooltip_bg_color"],--
    },
    ["gtk-icon-theme-name"]   = '"' .. theme.configs.acyl.index.Icon_Theme.Name .. '"',
    ["gtk-font-name"]         = "\"" .. theme.font .. "\"",
@@ -218,32 +222,32 @@ theme.configs.gtk.data = {
 
 -- Xcolors
 theme.configs.xcolors.data = {
-   ["foreground"] = theme.fg_normal,
-   ["background"] = theme.bg_focus,
+   ["foreground"] = c["xc_foreground"],
+   ["background"] = c["xc_background"],
    -- black
-   ["color0"] = theme.bg_focus,
-   ["color8"] = c["black russian"],
+   ["color0"] = c["xc_0"],
+   ["color8"] = c["xc_8"],
    -- red
-   ["color1"] = c["rouge"],
-   ["color9"] = c["zest"],
+   ["color1"] = c["xc_1"],
+   ["color9"] = c["xc_9"],
    -- green
-   ["color2"] = c["fruit salad"],
-   ["color10"] = c["celery"],
+   ["color2"] = c["xc_2"],
+   ["color10"] = c["xc_10"],
    -- brown/yellow
-   ["color3"] = c["nugget"],
-   ["color11"] = c["Dark Khaki"],
+   ["color3"] = c["xc_3"],
+   ["color11"] = c["xc_11"],
    -- blue
-   ["color4"] = c["stratos2"],
-   ["color12"] = c["stratos4"],
+   ["color4"] = c["xc_4"],
+   ["color12"] = c["xc_12"],
    -- magenta
-   ["color5"] = c["jagger"],
-   ["color13"] = c["fuchsia"],
+   ["color5"] = c["xc_5"],
+   ["color13"] = c["xc_13"],
    -- cyan
-   ["color6"] = c["bismark"],
-   ["color14"] = c["blue haze"],
+   ["color6"] = c["xc_6"],
+   ["color14"] = c["xc_14"],
    -- white
-   ["color7"] = c["pattens blue"],
-   ["color15"] = "#ffffff",
+   ["color7"] = c["xc_7"],
+   ["color15"] = c["xc_15"],
 }
 
 local t = {
@@ -253,22 +257,22 @@ theme.configs.acyl.data = {
 	 [1] = { 
 	    patterns = { ".+" },
 	    template = t["one color flat"],
-	    variables = { color = theme.fg_normal }
+	    variables = { color = c["icons"] }
 	 },
 	 [2] = {
 	    patterns = { ".+folder.+" },
 	    template = t["one color flat"],
-	    variables = { color = c["Dark Khaki"] }
+	    variables = { color = c["folder"] }
 	 },
 	 [3] = {
 	    patterns = { ".+alternative_icons/logos/.+" },
 	    template = t["one color flat"],
-	    variables = { color = c["stratos4"] }
+	    variables = { color = c["logo"] }
 	 },
 	 [4] = {
 	    patterns = { ".+navigation.+back.+", ".+navigation.+forward.+" },
 	    template = t["one color flat"],
-	    variables = { color = c["stratos3"]}
+	    variables = { color = c["navigation"]}
 	 }
       }
 

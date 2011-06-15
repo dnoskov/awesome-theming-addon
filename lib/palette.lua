@@ -11,12 +11,15 @@ function palette.parse (palettefile)
 	 local clrstring = string.match(cline, "%d+%s+%d+%s+%d+")
 	 local clrpartials = {}
 	 local clrname = ""
-	 
+
+	 clrnamestring = string.match(cline, "%a[^%c]+")
+
 	 for clrpartial in string.gmatch(clrstring, "%d+") do
-	    table.insert(clrpartials, string.format("%x", clrpartial))
+	    hpart = string.format("%2x", clrpartial)
+	    if # hpart < 2 then hpart = "0" .. hpart end
+	    table.insert(clrpartials, hpart)
 	 end
 	 
-	 clrnamestring = string.match(cline, "%a[^%c]+")
 	 clrstring = "#" .. clrpartials[1] .. clrpartials[2] .. clrpartials[3]
 	 for clrname in string.gmatch(clrnamestring, "[^,]+") do
 	    clrs[utils.trim(clrname)] = colors.new(clrstring)
