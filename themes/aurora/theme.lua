@@ -24,7 +24,7 @@ theme.configs    = {
 
       -- Все функции (по порядку), которые нужно вызвать для применения конфига.
       -- В каждую функцию передаётся таблица данного конфига (т.е. в данном случае theme.configs.gtk).
-      funcs = { configs.createGTKrcString, actions.writeFiles },
+      -- funcs = { configs.createGTKrcString, actions.writeFiles },
 
       -- В этой таблице содержатся настройки конфигурации, необходимые указанным выше функциям (см. ниже)
       data  = {},
@@ -32,7 +32,7 @@ theme.configs    = {
    },
    xcolors = {
       files   = { os.getenv("HOME") .. "/.Xcolors" },
-      funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBmerge },
+      -- funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBmerge },
       data    = {},
       strings = {}
    },
@@ -40,8 +40,11 @@ theme.configs    = {
       icons = {},
       links = {},
       paths = { 
+	 -- Путь, откуда будут браться иконки (строго говоря, не обязательно acyl)
 	 source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
+	 -- Путь, куда будут помещаться перекрашенные иконки
 	 dest = theme.path .. "/icons",
+	 -- Имя симлинка, который будет указывать на dest
 	 symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
       },
       patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
@@ -61,7 +64,7 @@ theme.configs    = {
 	 applications = { }
       },
       data = {},
-      funcs = { acyl.Apply }
+      -- funcs = { acyl.Apply }
       -- funcs = { }
    }
 }
@@ -278,9 +281,11 @@ theme.configs.acyl.data = {
 
 
 for cfgname, cfg in pairs(theme.configs) do
-   for i, fun in pairs(cfg.funcs) do
-      fun(cfg)
-   end
+   if cfg.funcs ~= nil then
+      for i, fun in ipairs(cfg.funcs) do
+	 fun(cfg)
+      end
+   else print(cfgname .. ' configuration disabled') end
 end
 
 
