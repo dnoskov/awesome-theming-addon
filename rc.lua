@@ -23,8 +23,6 @@ require("scratch")
 
 
 -- {{{ Variable definitions
--- Themes define colours, icons, and wallpapers
-beautiful.init(awful.util.getdir("config") .. "/themes/medusa/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 config = {
@@ -33,7 +31,8 @@ config = {
    browser       = "conkeror",
    torrentclient = "deluge",
    editor        = os.getenv("EDITOR") or "editor",
-   xsudo         = "gksu"
+   xsudo         = "gksu",
+   theme         = "Aurora"
 }
 
 config.cmd = {
@@ -43,6 +42,11 @@ config.cmd = {
    halt         = config.xsudo .. " halt",
    reboot       = config.xsudo .. " reboot"  
 }
+
+
+-- Themes define colours, icons, and wallpapers
+beautiful.init(awful.util.getdir("config") .. "/themes/"..config.theme:lower().."/theme.lua")
+
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
