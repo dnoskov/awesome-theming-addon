@@ -2,11 +2,8 @@
 --  "Aurora" awesome theme     --
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
-local configs = require "configs"
-local actions = require "actions"
+local cfgs = require "configs"
 local palette = require "palette"
--- local utils = require "utils"
-local acyl = require 'acyl'
 require 'colors'
 require 'pl'
 
@@ -15,59 +12,47 @@ require 'pl'
 theme = {}
 theme.name       = "Aurora"
 theme.path       = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
-theme.configs    = {
-   -- Здесь содержатся все конфигурации, которые нужно модифицировать синхронно с темой
-   gtk     = {
 
-      -- Таблица, содержащая все файлы, которые нужно модифицировать в данной конфигурации
-      files = { os.getenv("HOME") .. "/.gtkrc-2.0" },
-
-      -- Все функции (по порядку), которые нужно вызвать для применения конфига.
-      -- В каждую функцию передаётся таблица данного конфига (т.е. в данном случае theme.configs.gtk).
-      -- funcs = { configs.createGTKrcString, actions.writeFiles },
-
-      -- В этой таблице содержатся настройки конфигурации, необходимые указанным выше функциям (см. ниже)
-      data  = {},
-      strings = {}
-   },
-   xcolors = {
-      files   = { os.getenv("HOME") .. "/.Xcolors" },
-      -- funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBmerge },
-      data    = {},
-      strings = {}
-   },
-   acyl = {
-      icons = {},
-      links = {},
-      paths = { 
-	 -- Путь, откуда будут браться иконки (строго говоря, не обязательно acyl)
-	 source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
-	 -- Путь, куда будут помещаться перекрашенные иконки
-	 dest = theme.path .. "/icons",
-	 -- Имя симлинка, который будет указывать на dest
-	 symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
-      },
-      patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
-      index = {
-	 Icon_Theme = {
-	    Name = "awesome-icon-theme"
-	 }
-      },
-      settings = {
-	 alternatives = {
-	    folders = "acyl_2",
-	    logos = { "arch", 
-	       "real_icons/apps/checkbox-gtk.svg", "real_icons/places/distributor-logo.svg", "real_icons/apps/start-here.svg"
-	    },
-	    navigation = "moblin"
-	 },
-	 applications = { }
-      },
-      data = {},
-      -- funcs = { acyl.Apply }
-      -- funcs = { }
-   }
+cfgs.gtk.cfg     = {
+   -- Таблица, содержащая все файлы, которые нужно модифицировать в данной конфигурации
+   file = os.getenv("HOME") .. "/.gtkrc-2.0",
+   
+   -- В этой таблице содержатся настройки конфигурации, необходимые указанным выше функциям (см. ниже)
+   data  = {},
 }
+cfgs.xcolors.cfg = {
+   file    = os.getenv("HOME") .. "/.Xcolors" ,
+   data    = {},
+}
+cfgs.acyl.cfg = {
+   icons = {},
+   paths = { 
+      -- Путь, откуда будут браться иконки (строго говоря, не обязательно acyl)
+      source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
+      -- Путь, куда будут помещаться перекрашенные иконки
+      dest = theme.path .. "/icons",
+      -- Имя симлинка, который будет указывать на dest
+      symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
+   },
+   patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
+   index = {
+      Icon_Theme = {
+	 Name = "awesome-icon-theme"
+      }
+   },
+   settings = {
+      alternatives = {
+	 folders = "acyl_2",
+	 logos = { "arch", 
+	    "real_icons/apps/checkbox-gtk.svg", "real_icons/places/distributor-logo.svg", "real_icons/apps/start-here.svg"
+	 },
+	 navigation = "moblin"
+      },
+      applications = { }
+   },
+   data = {},
+}
+
 
 
 theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.jpg" }
@@ -78,7 +63,6 @@ theme.font      = "Monospace 8"
 
 -- {{{ Colors
 theme.colorobjects    = palette.parse(theme.path .. "/palette.gpl" )
-utils.writefile("/home/dnoskov/colors.current", pretty.write(theme.colorobjects))
 theme.colors = {}
 for clrname, clrobj in pairs(theme.colorobjects) do
    theme.colors[clrname] = tostring(clrobj)
@@ -195,7 +179,7 @@ theme.layout_floating   = theme.path .. "/layouts/floating.png"
 -- }}}
 -- }}}
 
-theme.configs.gtk.data = {
+cfgs.gtk.cfg.data = {
    ["gtk-theme-name"]        = '"Termlike"',
    ["gtk_color_scheme"] = {
       ["fg_color"]          = c["gtk_fg_color"],--
@@ -207,7 +191,7 @@ theme.configs.gtk.data = {
       ["tooltip_fg_color"]  = c["gtk_tooltip_fg_color"],--
       ["tooltip_bg_color"]  = c["gtk_tooltip_bg_color"],--
    },
-   ["gtk-icon-theme-name"]   = '"' .. theme.configs.acyl.index.Icon_Theme.Name .. '"',
+   ["gtk-icon-theme-name"]   = '"' .. cfgs.acyl.cfg.index.Icon_Theme.Name .. '"',
    ["gtk-font-name"]         = "\"" .. theme.font .. "\"",
    ["gtk-cursor-theme-name"] = '"OpenZone_Black_Slim"',
    ["gtk-cursor-theme-size"] = 0,
@@ -224,7 +208,7 @@ theme.configs.gtk.data = {
 }
 
 -- Xcolors
-theme.configs.xcolors.data = {
+cfgs.xcolors.cfg.data = {
    ["foreground"] = c["xc_foreground"],
    ["background"] = c["xc_background"],
    -- black
@@ -256,7 +240,7 @@ theme.configs.xcolors.data = {
 local t = {
    ["one color flat"] = theme.path .. "/icons/one_color_flat.xml"
 }
-theme.configs.acyl.data = {
+cfgs.acyl.cfg.data = {
 	 [1] = { 
 	    patterns = { ".+" },
 	    template = t["one color flat"],
@@ -280,12 +264,17 @@ theme.configs.acyl.data = {
       }
 
 
-for cfgname, cfg in pairs(theme.configs) do
-   if cfg.funcs ~= nil then
-      for i, fun in ipairs(cfg.funcs) do
-	 fun(cfg)
-      end
-   else print(cfgname .. ' configuration disabled') end
+      -- Включенные конфиги (раскомментируйте для отключения)
+      -- cfgs.gtk.cfg     = nil
+      -- cfgs.xcolors.cfg = nil
+      -- cfgs.acyl.cfg    = nil
+
+for cfgname, cfg in pairs(cfgs) do
+   if cfg.cfg ~= nil then
+      io.write("Применяется конфигурация " .. cfgname .. " .. ")
+      cfg.Apply(cfg.cfg)
+      io.write("ГОТОВО.\n")
+   else print("Конфигурация " .. cfgname .. " отключена. Никакие действия не выполняются.") end
 end
 
 

@@ -1,5 +1,6 @@
-require("colors")
-local utils = require "utils"
+require 'colors'
+require 'pl'
+stringx.import()
 local palette = {}
 
 function palette.parse (palettefile)
@@ -22,7 +23,7 @@ function palette.parse (palettefile)
 	 
 	 clrstring = "#" .. clrpartials[1] .. clrpartials[2] .. clrpartials[3]
 	 for clrname in string.gmatch(clrnamestring, "[^,]+") do
-	    clrs[utils.trim(clrname)] = colors.new(clrstring)
+	    clrs[clrname:strip()] = colors.new(clrstring)
 	 end
       end
    end

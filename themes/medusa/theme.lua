@@ -2,67 +2,53 @@
 --  "Medusa" awesome theme     --
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
-local configs = require "configs"
-local actions = require "actions"
+local cfgs = require "configs"
 local palette = require "palette"
-local utils = require "utils"
-local acyl = require 'acyl'
 require 'colors'
+require 'pl'
 
 -- {{{ Main
 
 theme = {}
 theme.name       = "Medusa"
 theme.path       = awful.util.getdir("config") .. "/themes/" .. theme.name:lower()
-theme.configs    = {
-   -- Здесь содержатся все конфигурации, которые нужно модифицировать синхронно с темой
-   gtk     = {
+cfgs.gtk.cfg     = {
+   -- Таблица, содержащая все файлы, которые нужно модифицировать в данной конфигурации
+   file = os.getenv("HOME") .. "/.gtkrc-2.0",
 
-      -- Таблица, содержащая все файлы, которые нужно модифицировать в данной конфигурации
-      files = { os.getenv("HOME") .. "/.gtkrc-2.0" },
-
-      -- Все функции (по порядку), которые нужно вызвать для применения конфига.
-      -- В каждую функцию передаётся таблица данного конфига (т.е. в данном случае theme.configs.gtk).
-      funcs = { configs.createGTKrcString, actions.writeFiles },
-
-      -- В этой таблице содержатся настройки конфигурации, необходимые указанным выше функциям (см. ниже)
-      data  = {},
-      strings = {}
-   },
-   xcolors = {
-      files   = { os.getenv("HOME") .. "/.Xcolors" },
-      funcs   = { configs.createXcolorsString, actions.writeFiles, actions.XRDBmerge },
-      data    = {},
-      strings = {}
-   },
-   acyl = {
-      icons = {},
-      links = {},
-      paths = { 
-	 source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
-	 dest = theme.path .. "/icons",
-	 symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
-      },
-      patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
-      index = {
-	 Icon_Theme = {
-	    Name = "awesome-icon-theme"
-	 }
-      },
-      settings = {
-	 alternatives = {
-	    folders = "acyl_2",
-	    logos = { "arch", 
-	       "real_icons/apps/checkbox-gtk.svg", "real_icons/places/distributor-logo.svg", "real_icons/apps/start-here.svg"
-	    },
-	    navigation = "moblin"
-	 },
-	 applications = { }
-      },
-      data = {},
-      funcs = { acyl.Apply }
-   }
+   -- В этой таблице содержатся настройки конфигурации, необходимые указанным выше функциям (см. ниже)
+   data  = {},
 }
+cfgs.xcolors.cfg = {
+   file    = os.getenv("HOME") .. "/.Xcolors",
+   data    = {},
+}
+cfgs.acyl.cfg = {
+   icons = {},
+   paths = { 
+      source = os.getenv("HOME") .. "/.icons/ACYL_Icon_Theme_0.9.3",
+      dest = theme.path .. "/icons",
+      symlinkto = os.getenv("HOME") .. "/.icons/awesome-icon-theme"
+   },
+   patterns = { ".+svg$", ".+png$", "arch", "debian", "fedora", "gentoo", "gnome", "ubuntu", "zenwalk" },
+   index = {
+      Icon_Theme = {
+	 Name = "awesome-icon-theme"
+      }
+   },
+   settings = {
+      alternatives = {
+	 folders = "acyl_2",
+	 logos = { "arch", 
+	    "real_icons/apps/checkbox-gtk.svg", "real_icons/places/distributor-logo.svg", "real_icons/apps/start-here.svg"
+	 },
+	 navigation = "moblin"
+      },
+      applications = { }
+   },
+   data = {},
+}
+
 
 
 theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.jpg" }
@@ -188,7 +174,7 @@ theme.layout_floating   = theme.path .. "/layouts/floating.png"
 -- }}}
 -- }}}
 
-theme.configs.gtk.data = {
+cfgs.gtk.cfg.data = {
    ["gtk-theme-name"]        = '"Termlike"',
    ["gtk_color_scheme"] = {
       ["fg_color"]          = theme.fg_normal,
@@ -200,7 +186,7 @@ theme.configs.gtk.data = {
       ["tooltip_fg_color"]  = theme.fg_normal,
       ["tooltip_bg_color"]  = theme.bg_focus,
    },
-   ["gtk-icon-theme-name"]   = '"' .. theme.configs.acyl.index.Icon_Theme.Name .. '"',
+   ["gtk-icon-theme-name"]   = '"' .. cfgs.acyl.cfg.index.Icon_Theme.Name .. '"',
    ["gtk-font-name"]         = "\"" .. theme.font .. "\"",
    ["gtk-cursor-theme-name"] = '"OpenZone_Black_Slim"',
    ["gtk-cursor-theme-size"] = 0,
@@ -217,7 +203,7 @@ theme.configs.gtk.data = {
 }
 
 -- Xcolors
-theme.configs.xcolors.data = {
+cfgs.xcolors.cfg.data = {
    ["foreground"] = theme.fg_normal,
    ["background"] = theme.bg_focus,
    -- black
@@ -249,7 +235,7 @@ theme.configs.xcolors.data = {
 local t = {
    ["one color flat"] = theme.path .. "/icons/one_color_flat.xml"
 }
-theme.configs.acyl.data = {
+cfgs.acyl.cfg.data = {
 	 [1] = { 
 	    patterns = { ".+" },
 	    template = t["one color flat"],
@@ -273,11 +259,17 @@ theme.configs.acyl.data = {
       }
 
 
-for cfgname, cfg in pairs(theme.configs) do
-   for i, fun in pairs(cfg.funcs) do
-      fun(cfg)
-   end
-end
+      -- Включенные конфиги (раскомментируйте для отключения)
+      -- cfgs.gtk.cfg     = nil
+      -- cfgs.xcolors.cfg = nil
+      -- cfgs.acyl.cfg    = nil
 
+for cfgname, cfg in pairs(cfgs) do
+   if cfg.cfg ~= nil then
+      io.write("Применяется конфигурация " .. cfgname .. " .. ")
+      cfg.Apply(cfg.cfg)
+      io.write("ГОТОВО.\n")
+   else print("Конфигурация " .. cfgname .. " отключена. Никакие действия не выполняются.") end
+end
 
 return theme

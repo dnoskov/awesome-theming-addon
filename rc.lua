@@ -11,7 +11,6 @@ package.path = package.path .. ";" .. table.concat(rcpath, ";")
 
 -- Theme handling library
 require("beautiful")
-local acyl = require 'acyl'
 -- Notification library
 require("naughty")
 -- Tag management
@@ -32,7 +31,7 @@ config = {
    torrentclient = "deluge",
    editor        = os.getenv("EDITOR") or "editor",
    xsudo         = "gksu",
-   theme         = "Aurora"
+   theme         = "Medusa"
 }
 
 config.cmd = {
@@ -75,8 +74,7 @@ layouts = {
 -- {{{ Shifty
 shifty.config.tags = {
    ["1:sys"] = { init = true, position = 1, screen = 1, mwfact = 0.60 },
-   ["3:www"] = { exclusive = true, position = 3, spawn = config.browser,
-                 layout = layouts[5]                                  },
+   ["3:www"] = { position = 3, spawn = config.browser, layout = layouts[5] },
    ["2:term"] = { persist = true, position = 2, layout = layouts[12]  },
    ["p2p"] = { spawn = config.torrentclient },
 }
@@ -152,11 +150,14 @@ mytextclock = awful.widget.textclock({ align = "right" })
 
 -- My AWESOME Clock
 cwhours = widget({ type = "textbox", align = "left", width = "0"})
-vicious.register(cwhours, vicious.widgets.date, "<span font='Monospace bold 28' color='"..beautiful.fg_focus.."'>%H</span>", 1)
+vicious.register(cwhours, vicious.widgets.date, 
+		 "<span font='Monospace bold 28' color='"..beautiful.fg_focus.."'>%H</span>", 1)
 cwminutes = widget({ type = "textbox", align = "left", width = "0"})
-vicious.register(cwminutes, vicious.widgets.date, "<span font='Monospace bold 11' color='"..beautiful.fg_focus.."'>%M</span>", 1)
+vicious.register(cwminutes, vicious.widgets.date, 
+		 "<span font='Monospace bold 11' color='"..beautiful.fg_focus.."'>%M</span>", 1)
 cwseconds = widget({ type = "textbox", align = "left", width = "0" })
-vicious.register(cwseconds, vicious.widgets.date, "<span font='Monospace 11' color='"..beautiful.fg_focus.."'>%S</span>", 1)
+vicious.register(cwseconds, vicious.widgets.date, 
+		 "<span font='Monospace 11' color='"..beautiful.fg_focus.."'>%S</span>", 1)
 
 -- My AWESOME Date (not so awesome for now)
 cwdate = widget({ type = "textbox", align = "left", width = "0"})

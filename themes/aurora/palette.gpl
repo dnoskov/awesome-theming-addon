@@ -3,12 +3,12 @@ Name: palette.gpl
 Columns: 1
 #
 39	68	72	fg_focus, gtk_selected_bg_color
-16	35	37	fg_normal, bg_urgent, gtk_fg_color, gtk_text_color, gtk_tooltip_bg_color, xc_foreground, xc_0, icons
-176	187	179	bg_focus, gtk_bg_color, gtk_tooltip_fg_color, gtk_selected_fg_color, xc_background, xc_7
+16	35	37	fg_normal, bg_urgent, gtk_fg_color, gtk_text_color, gtk_tooltip_bg_color, xc_foreground, xc_15, icons
+176	187	179	bg_focus, gtk_bg_color, gtk_tooltip_fg_color, gtk_selected_fg_color, xc_background, xc_0
 139	151	142	gtk_base_color
-222	226	223	bg_normal, xc_15
+222	226	223	bg_normal, xc_8
 216	174	159	fg_urgent
-10	15	16	xc_8
+10	15	16	xc_7
 129	60	56	xc_1
 229	58	57	xc_9
 23	52	48	xc_6
