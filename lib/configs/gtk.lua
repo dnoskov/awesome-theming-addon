@@ -54,7 +54,9 @@ function gtk.test ()
 end
 
 function gtk.Apply (cfg)
+   io.write("Применение настроек GTK .. ")
    utils.writefile(cfg.file, getString(cfg.data))
+   io.write("ГОТОВО.\n")
 end
 
 

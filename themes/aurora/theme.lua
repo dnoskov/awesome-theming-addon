@@ -240,42 +240,45 @@ cfgs.xcolors.cfg.data = {
 local t = {
    ["one color flat"] = theme.path .. "/icons/one_color_flat.xml"
 }
+
 cfgs.acyl.cfg.data = {
-	 [1] = { 
-	    patterns = { ".+" },
-	    template = t["one color flat"],
-	    variables = { color = c["icons"] }
-	 },
-	 [2] = {
-	    patterns = { ".+folder.+" },
-	    template = t["one color flat"],
-	    variables = { color = c["folder"] }
-	 },
-	 [3] = {
-	    patterns = { ".+alternative_icons/logos/.+" },
-	    template = t["one color flat"],
-	    variables = { color = c["logo"] }
-	 },
-	 [4] = {
-	    patterns = { ".+navigation.+back.+", ".+navigation.+forward.+" },
-	    template = t["one color flat"],
-	    variables = { color = c["navigation"]}
-	 }
-      }
+   [1] = { 
+      patterns = { ".+" },
+      template = t["one color flat"],
+      variables = { color = c["icons"] }
+   },
+   [2] = {
+      patterns = { ".+folder.+" },
+      template = t["one color flat"],
+      variables = { color = c["folder"] }
+   },
+   [3] = {
+      patterns = { ".+alternative_icons/logos/.+" },
+      template = t["one color flat"],
+      variables = { color = c["logo"] }
+   },
+   [4] = {
+      patterns = { ".+navigation.+back.+", ".+navigation.+forward.+" },
+      template = t["one color flat"],
+      variables = { color = c["navigation"]}
+   }
+}
 
 
-      -- Включенные конфиги (раскомментируйте для отключения)
-      -- cfgs.gtk.cfg     = nil
-      -- cfgs.xcolors.cfg = nil
-      -- cfgs.acyl.cfg    = nil
+-- Включенные конфиги (раскомментируйте для отключения)
+-- cfgs.gtk.cfg     = nil
+-- cfgs.xcolors.cfg = nil
+-- cfgs.acyl.cfg    = nil
 
-for cfgname, cfg in pairs(cfgs) do
-   if cfg.cfg ~= nil then
-      io.write("Применяется конфигурация " .. cfgname .. " .. ")
-      cfg.Apply(cfg.cfg)
-      io.write("ГОТОВО.\n")
-   else print("Конфигурация " .. cfgname .. " отключена. Никакие действия не выполняются.") end
-end
+cfgs.Apply()
+
+-- for cfgname, cfg in pairs(cfgs) do
+--    if cfg.cfg ~= nil then
+--       io.write("Применяется конфигурация " .. cfgname .. " .. ")
+--       cfg.Apply(cfg.cfg)
+--       io.write("ГОТОВО.\n")
+--    else print("Конфигурация " .. cfgname .. " отключена. Никакие действия не выполняются.") end
+-- end
 
 
 return theme

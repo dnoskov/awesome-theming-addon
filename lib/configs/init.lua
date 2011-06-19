@@ -4,5 +4,16 @@ local configs = {
    acyl = require 'configs.acyl'
 }
 
+function configs.Apply ()
+   for cfgname, cfg in pairs(configs) do
+      if type(cfg) ~= "function" then
+	 cfg.Apply(cfg.cfg)
+      end
+   end
+end
+
+function configs.test ()
+
+end
 
 return configs

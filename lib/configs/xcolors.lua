@@ -38,7 +38,9 @@ local function getString (data)
 end
 
 function mergeXRDB (file)
+   io.write("Слияние файла " .. file .. " с базой данных ресурсов X .. ")
    awful.util.spawn_with_shell("xrdb -m " .. file)
+   io.write("ГОТОВО.\n")
 end
 
 function xcolors.test ()
@@ -46,8 +48,10 @@ function xcolors.test ()
 end
 
 function xcolors.Apply (cfg)
+   io.write("Применение настроек Xcolors .. \n")
    utils.writefile(cfg.file, getString(cfg.data))
    mergeXRDB(cfg.file)
+   io.write("ГОТОВО.\n")
 end
 
 return xcolors

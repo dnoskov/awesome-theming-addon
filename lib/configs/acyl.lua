@@ -209,30 +209,32 @@ local function genIndex (index, paths)
 end
 
 function acyl.Apply (cfg)
+   io.write("Применение настроек темы иконок Any Color You Like .. \n")
    for pattern in List.iter(cfg.patterns) do
-      io.write("\nПолучение списка иконок для шаблона \"" .. pattern .. "\" .. ")
+      io.write("Получение списка иконок для шаблона \"" .. pattern .. "\" .. ")
       getIcons (cfg.paths.source, pattern, cfg.icons)
-      io.write("ГОТОВО.")
+      io.write("ГОТОВО.\n")
    end
-   io.write("\nОбновление путей .. ")
+   io.write("Обновление путей .. ")
    createPaths   (cfg.icons, cfg.paths)
-   io.write("ГОТОВО.")
+   io.write("ГОТОВО.\n")
 
-   io.write("\nПерекрашивание иконок .. ")
+   io.write("Перекрашивание иконок .. ")
    redrawIcons   (cfg.icons, cfg.paths, cfg.data)
-   io.write("ГОТОВО.")
+   io.write("ГОТОВО.\n")
 
-   io.write("\nПрименение настроек .. ")
+   io.write("Применение настроек .. ")
    applySettings (cfg.settings, cfg.paths)
-   io.write("ГОТОВО.")
+   io.write("ГОТОВО.\n")
 
-   io.write("\nСоздание симлинка .. ")
+   io.write("Создание симлинка .. ")
    symLink       (cfg.icons, cfg.paths)
-   io.write("ГОТОВО.")
+   io.write("ГОТОВО.\n")
 
-   io.write("\nСоздание индекса новой темы .. ")
+   io.write("Создание индекса новой темы .. ")
    genIndex      (cfg.index, cfg.paths)
    io.write("ГОТОВО.\n")
+   io.write(".. ГОТОВО.\n")
 end
 
 return acyl
