@@ -266,9 +266,9 @@ cfgs.acyl.cfg.data = {
 
 
 -- Включенные конфиги (раскомментируйте для отключения)
--- cfgs.gtk.cfg     = nil
--- cfgs.xcolors.cfg = nil
--- cfgs.acyl.cfg    = nil
+cfgs.gtk.cfg     = nil
+cfgs.xcolors.cfg = nil
+cfgs.acyl.cfg    = nil
 
 cfgs.Apply()
 

@@ -127,7 +127,7 @@ local function redrawIcons (icons, paths, data)
 	    end
 	 end
       end
-      
+
       ss = utils.readfile(si)
       ds = string.gsub(ss, "<acyl%-settings>.*</acyl%-settings>", rs)
 

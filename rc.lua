@@ -31,7 +31,7 @@ config = {
    torrentclient = "deluge",
    editor        = os.getenv("EDITOR") or "editor",
    xsudo         = "gksu",
-   theme         = "Medusa"
+   theme         = "Nataly"
 }
 
 config.cmd = {

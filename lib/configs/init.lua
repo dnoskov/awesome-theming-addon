@@ -7,7 +7,9 @@ local configs = {
 function configs.Apply ()
    for cfgname, cfg in pairs(configs) do
       if type(cfg) ~= "function" then
-	 cfg.Apply(cfg.cfg)
+	 if cfg.cfg ~= nil then
+	    cfg.Apply(cfg.cfg)
+	 else print("Конфигурация " .. cfgname .. " отключена/пуста.") end
       end
    end
 end
