@@ -1,5 +1,5 @@
 ---------------------------------
---  "Aurora" awesome theme     --
+--  "Nataly" awesome theme     --
 -- By Dmitriy Noskov (dnoskov) --
 ---------------------------------
 local cfgs = require "configs"
@@ -59,7 +59,7 @@ theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.png" }
 -- }}}
 
 -- {{{ Styles
-theme.font      = "Monospace 8"
+theme.font      = "Monospace 10"
 
 -- {{{ Colors
 theme.colorobjects    = palette.parse(theme.path .. "/palette.gpl" )
@@ -266,9 +266,9 @@ cfgs.acyl.cfg.data = {
 
 
 -- Включенные конфиги (раскомментируйте для отключения)
--- cfgs.gtk.cfg     = nil
--- cfgs.xcolors.cfg = nil
--- cfgs.acyl.cfg    = nil
+cfgs.gtk.cfg     = nil
+cfgs.xcolors.cfg = nil
+cfgs.acyl.cfg    = nil
 
 cfgs.Apply()
 

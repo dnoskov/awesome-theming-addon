@@ -46,6 +46,7 @@ config.cmd = {
 -- Themes define colours, icons, and wallpapers
 beautiful.init(awful.util.getdir("config") .. "/themes/"..config.theme:lower().."/theme.lua")
 
+config.font = string.gsub(beautiful.font, " %d*$", "")
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -151,17 +152,17 @@ mytextclock = awful.widget.textclock({ align = "right" })
 -- My AWESOME Clock
 cwhours = widget({ type = "textbox", align = "left", width = "0"})
 vicious.register(cwhours, vicious.widgets.date, 
-		 "<span font='Monospace bold 28' color='"..beautiful.fg_focus.."'>%H</span>", 1)
-cwminutes = widget({ type = "textbox", align = "left", width = "0"})
+		 "<span font='"..config.font.." bold 32' color='"..beautiful.fg_focus.."'>%H</span>", 1)
+cwminutes = widget({ type = "textbox", align = "center", width = "0"})
 vicious.register(cwminutes, vicious.widgets.date, 
-		 "<span font='Monospace bold 11' color='"..beautiful.fg_focus.."'>%M</span>", 1)
-cwseconds = widget({ type = "textbox", align = "left", width = "0" })
+		 "<span font='"..config.font.." bold 10' color='"..beautiful.fg_focus.."'>%M</span>", 1)
+cwseconds = widget({ type = "textbox", align = "center", width = "0" })
 vicious.register(cwseconds, vicious.widgets.date, 
-		 "<span font='Monospace 11' color='"..beautiful.fg_focus.."'>%S</span>", 1)
+		 "<span font='"..config.font.." 10' color='"..beautiful.fg_focus.."'>%S</span>", 1)
 
 -- My AWESOME Date (not so awesome for now)
 cwdate = widget({ type = "textbox", align = "left", width = "0"})
-vicious.register(cwdate, vicious.widgets.date, "<span font='Monospace 10' color='"..beautiful.fg_focus.."'> %a <b>%d</b> %b </span>", 1)
+vicious.register(cwdate, vicious.widgets.date, "<span font='"..config.font.." 10' color='"..beautiful.fg_focus.."'> %a <b>%d</b> %b </span>", 1)
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -297,8 +298,8 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
     
     -- Create the wibox
-    wiboxmain[s] = awful.wibox({ height=32, width=1215, screen = s, ontop = false })
-    wiboxclock[s] = awful.wibox({ height=32, width=80, x= 1215, screen = s })
+    wiboxmain[s] = awful.wibox({ height=32, width=1230, screen = s, ontop = false })
+    wiboxclock[s] = awful.wibox({ height=32, width=50, x= 1230, screen = s })
     -- Add widgets to the wibox - order matters
     wiboxmain[s].widgets = {
        {	     
