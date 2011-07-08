@@ -55,14 +55,14 @@ cfgs.acyl.cfg = {
 
 
 
-theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper.png" }
+theme.wallpaper_cmd = { "awsetbg " .. theme.path .. "/wallpaper3.png" }
 -- }}}
 
 -- {{{ Styles
 theme.font      = "Monospace 10"
 
 -- {{{ Colors
-theme.colorobjects    = palette.parse(theme.path .. "/palette.gpl" )
+theme.colorobjects    = palette.parse(theme.path .. "/palettedark.gpl" )
 theme.colors = {}
 for clrname, clrobj in pairs(theme.colorobjects) do
    theme.colors[clrname] = tostring(clrobj)
@@ -70,12 +70,12 @@ end
 local c = theme.colors
 
 
-theme.fg_normal = c["fg_normal"]--
-theme.fg_focus  = c["fg_focus"]--
-theme.fg_urgent = c["fg_urgent"]--
-theme.bg_normal = c["bg_normal"]--
-theme.bg_focus  = c["bg_focus"]--
-theme.bg_urgent = c["bg_urgent"]--
+theme.fg_normal = c["fg_normal"]
+theme.fg_focus  = c["fg_focus"]
+theme.fg_urgent = c["fg_urgent"]
+theme.bg_normal = c["bg_normal"]
+theme.bg_focus  = c["bg_focus"]
+theme.bg_urgent = c["bg_urgent"]
 -- }}}
 
 
@@ -107,7 +107,8 @@ theme.titlebar_bg_normal = "#3F3F3F"
 -- beautiful.variable in your rc.lua
 --theme.fg_center_widget = "#88A175"
 --theme.fg_end_widget    = "#FF5656"
-theme.bg_widget          = theme.bg_focus
+theme.bg_widget          = c["bg_widget"]
+theme.fg_widget          = c["fg_widget"]
 theme.border_widget      = theme.fg_focus
 -- }}}
 
@@ -133,24 +134,24 @@ theme.taglist_squares_resize = "false"
 -- }}}
 
 -- {{{ Misc
-theme.awesome_icon           = theme.path .. "/awesome-icon.png"
-theme.menu_submenu_icon      = theme.path .. "/submenu.png"
-theme.tasklist_floating_icon = theme.path .. "/floatingw.png"
+theme.awesome_icon           = theme.path .. "/awesome-icon.xpm"
+theme.menu_submenu_icon      = theme.path .. "/submenu.xpm"
+theme.tasklist_floating_icon = theme.path .. "/floatingw.xpm"
 -- }}}
 
 -- {{{ Layout
-theme.layout_tile       = theme.path .. "/layouts/tile.png"
-theme.layout_tileleft   = theme.path .. "/layouts/tileleft.png"
-theme.layout_tilebottom = theme.path .. "/layouts/tilebottom.png"
-theme.layout_tiletop    = theme.path .. "/layouts/tiletop.png"
-theme.layout_fairv      = theme.path .. "/layouts/fairv.png"
-theme.layout_fairh      = theme.path .. "/layouts/fairh.png"
-theme.layout_spiral     = theme.path .. "/layouts/spiral.png"
-theme.layout_dwindle    = theme.path .. "/layouts/dwindle.png"
-theme.layout_max        = theme.path .. "/layouts/max.png"
-theme.layout_fullscreen = theme.path .. "/layouts/fullscreen.png"
-theme.layout_magnifier  = theme.path .. "/layouts/magnifier.png"
-theme.layout_floating   = theme.path .. "/layouts/floating.png"
+theme.layout_tile       = theme.path .. "/layouts/tile.xpm"
+theme.layout_tileleft   = theme.path .. "/layouts/tileleft.xpm"
+theme.layout_tilebottom = theme.path .. "/layouts/tilebottom.xpm"
+theme.layout_tiletop    = theme.path .. "/layouts/tiletop.xpm"
+theme.layout_fairv      = theme.path .. "/layouts/fairv.xpm"
+theme.layout_fairh      = theme.path .. "/layouts/fairh.xpm"
+theme.layout_spiral     = theme.path .. "/layouts/spiral.xpm"
+theme.layout_dwindle    = theme.path .. "/layouts/dwindle.xpm"
+theme.layout_max        = theme.path .. "/layouts/max.xpm"
+theme.layout_fullscreen = theme.path .. "/layouts/fullscreen.xpm"
+theme.layout_magnifier  = theme.path .. "/layouts/magnifier.xpm"
+theme.layout_floating   = theme.path .. "/layouts/floating.xpm"
 -- }}}
 
 -- {{{ Titlebar
@@ -182,14 +183,14 @@ theme.layout_floating   = theme.path .. "/layouts/floating.png"
 cfgs.gtk.cfg.data = {
    ["gtk-theme-name"]        = '"Termlike"',
    ["gtk_color_scheme"] = {
-      ["fg_color"]          = c["gtk_fg_color"],--
-      ["bg_color"]          = c["gtk_bg_color"],--
-      ["base_color"]        = c["gtk_base_color"],--
-      ["text_color"]        = c["gtk_text_color"],--
-      ["selected_bg_color"] = c["gtk_selected_bg_color"],--
-      ["selected_fg_color"] = c["gtk_selected_fg_color"],--
-      ["tooltip_fg_color"]  = c["gtk_tooltip_fg_color"],--
-      ["tooltip_bg_color"]  = c["gtk_tooltip_bg_color"],--
+      ["fg_color"]          = c["gtk_fg_color"],
+      ["bg_color"]          = c["gtk_bg_color"],
+      ["base_color"]        = c["gtk_base_color"],
+      ["text_color"]        = c["gtk_text_color"],
+      ["selected_bg_color"] = c["gtk_selected_bg_color"],
+      ["selected_fg_color"] = c["gtk_selected_fg_color"],
+      ["tooltip_fg_color"]  = c["gtk_tooltip_fg_color"],
+      ["tooltip_bg_color"]  = c["gtk_tooltip_bg_color"],
    },
    ["gtk-icon-theme-name"]   = '"' .. cfgs.acyl.cfg.index.Icon_Theme.Name .. '"',
    ["gtk-font-name"]         = "\"" .. theme.font .. "\"",
@@ -257,11 +258,6 @@ cfgs.acyl.cfg.data = {
       template = t["one color flat"],
       variables = { color = c["logo"] }
    },
-   [4] = {
-      patterns = { ".+navigation.+back.+", ".+navigation.+forward.+" },
-      template = t["one color flat"],
-      variables = { color = c["navigation"]}
-   }
 }
 
 

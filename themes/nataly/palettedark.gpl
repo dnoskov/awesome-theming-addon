@@ -1,0 +1,23 @@
+GIMP Palette
+Name: palettedark.gpl
+Columns: 1
+#
+131	125	106	bg_normal, gtk_base_color, bg_widget, gtk_selected_bg_color
+49	53	47	xc_0, bg_focus, gtk_bg_color, gtk_tooltip_fg_color, xc_background
+25	26	24	xc_8
+196	164	122	bg_urgent
+242	234	181	fg_focus, gtk_selected_fg_color, gtk_tooltip_bg_color, fg_widget, fg_urgent, folder
+235	236	219	xc_7, gtk_text_color, fg_normal, gtk_fg_color, xc_foreground, icons
+255	255	255	xc_15
+173	96	90	xc_1
+214	60	48	xc_9
+174	174	114	xc_2
+156	155	45	xc_10
+173	135	89	xc_3
+226	206	84	xc_11
+75	143	182	xc_4, logo
+159	191	209	xc_12
+209	159	191	xc_5
+182	75	143	xc_13
+67	134	146	xc_6
+107	179	191	xc_14

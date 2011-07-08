@@ -152,17 +152,17 @@ mytextclock = awful.widget.textclock({ align = "right" })
 -- My AWESOME Clock
 cwhours = widget({ type = "textbox", align = "left", width = "0"})
 vicious.register(cwhours, vicious.widgets.date, 
-		 "<span font='"..config.font.." bold 32' color='"..beautiful.fg_focus.."'>%H</span>", 1)
+		 "<span font='"..config.font.." bold 32' color='"..beautiful.fg_normal.."'>%H</span>", 1)
 cwminutes = widget({ type = "textbox", align = "center", width = "0"})
 vicious.register(cwminutes, vicious.widgets.date, 
-		 "<span font='"..config.font.." bold 10' color='"..beautiful.fg_focus.."'>%M</span>", 1)
+		 "<span font='"..config.font.." bold 10' color='"..beautiful.fg_normal.."'>%M</span>", 1)
 cwseconds = widget({ type = "textbox", align = "center", width = "0" })
 vicious.register(cwseconds, vicious.widgets.date, 
-		 "<span font='"..config.font.." 10' color='"..beautiful.fg_focus.."'>%S</span>", 1)
+		 "<span font='"..config.font.." 10' color='"..beautiful.fg_normal.."'>%S</span>", 1)
 
 -- My AWESOME Date (not so awesome for now)
 cwdate = widget({ type = "textbox", align = "left", width = "0"})
-vicious.register(cwdate, vicious.widgets.date, "<span font='"..config.font.." 10' color='"..beautiful.fg_focus.."'> %a <b>%d</b> %b </span>", 1)
+vicious.register(cwdate, vicious.widgets.date, "<span font='"..config.font.." 10' color='"..beautiful.fg_normal.."'> %a <b>%d</b> %b </span>", 1)
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -172,52 +172,52 @@ mysystray = widget({ type = "systray" })
 cpubar = awful.widget.progressbar()
 cpubar:set_width(50)
 cpubar:set_height(6)
-cpubar:set_color(beautiful.fg_normal)
+cpubar:set_color(beautiful.fg_widget)
 cpubar:set_background_color(beautiful.bg_widget)
 awful.widget.layout.margins[cpubar.widget] = {top = 5}
 vicious.register(cpubar, vicious.widgets.cpu, "$1")
 cpucaption = widget({ type = "textbox" })
-cpucaption.text = "<span weight='bold' color='" .. beautiful.fg_focus .. "'> cpu: </span>"
+cpucaption.text = "<span weight='bold' color='" .. beautiful.fg_normal .. "'> cpu: </span>"
 
 -- Mem Widget
 membar = awful.widget.progressbar()
 membar:set_width(50)
 membar:set_height(6)
-membar:set_color(beautiful.fg_normal)
+membar:set_color(beautiful.fg_widget)
 membar:set_background_color(beautiful.bg_widget)
 awful.widget.layout.margins[membar.widget] = {top = 5}
 vicious.register(membar, vicious.widgets.mem, "$1", 10)
 memcaption = widget({ type = "textbox" })
-memcaption.text = "<span weight='bold' color='" .. beautiful.fg_focus .. "'> mem: </span>"
+memcaption.text = "<span weight='bold' color='" .. beautiful.fg_normal .. "'> mem: </span>"
 
 -- FS Widgets
 fsrootbar = awful.widget.progressbar()
 fsrootbar:set_width(50)
 fsrootbar:set_height(6)
-fsrootbar:set_color(beautiful.fg_normal)
+fsrootbar:set_color(beautiful.fg_widget)
 fsrootbar:set_background_color(beautiful.bg_widget)
 awful.widget.layout.margins[fsrootbar.widget] = {top = 5}
 vicious.register(fsrootbar, vicious.widgets.fs, "${/ avail_p}", 10)
 fsrootcaption = widget({ type = "textbox" })
 vicious.register(fsrootcaption, vicious.widgets.fs, 
-		 "<span weight='bold' color='" .. beautiful.fg_focus .. "'> root:</span> ${/ avail_gb}GB ", 10)
+		 "<span weight='bold' color='" .. beautiful.fg_normal .. "'> root:</span> ${/ avail_gb}GB ", 10)
 
 fshomebar = awful.widget.progressbar()
 fshomebar:set_width(50)
 fshomebar:set_height(6)
-fshomebar:set_color(beautiful.fg_normal)
+fshomebar:set_color(beautiful.fg_widget)
 fshomebar:set_background_color(beautiful.bg_widget)
 awful.widget.layout.margins[fshomebar.widget] = {top = 5}
 vicious.register(fshomebar, vicious.widgets.fs, "${/home avail_p}", 10)
 fshomecaption = widget({ type = "textbox" })
 vicious.register(fshomecaption, vicious.widgets.fs, 
-		 "<span weight='bold' color='" .. beautiful.fg_focus .. "'> home:</span> ${/home avail_gb}GB ", 10)
+		 "<span weight='bold' color='" .. beautiful.fg_normal .. "'> home:</span> ${/home avail_gb}GB ", 10)
 
 -- Net Widgets
 netupgraph = awful.widget.graph()
 netupgraph:set_width(50)
 netupgraph:set_height(13)
-netupgraph:set_color(beautiful.fg_normal)
+netupgraph:set_color(beautiful.fg_widget)
 netupgraph:set_background_color(beautiful.bg_widget)
 awful.widget.layout.margins[netupgraph.widget] = {top = 2}
 vicious.register(netupgraph, vicious.widgets.net, "${eth0 up_kb}", 0.28)
@@ -227,13 +227,13 @@ vicious.register(netupcaption, vicious.widgets.net, " ↑: ")
 netdowngraph = awful.widget.graph()
 netdowngraph:set_width(50)
 netdowngraph:set_height(13)
-netdowngraph:set_color(beautiful.fg_normal)
+netdowngraph:set_color(beautiful.fg_widget)
 netdowngraph:set_background_color(beautiful.bg_widget)
 awful.widget.layout.margins[netdowngraph.widget] = {top = 2}
 vicious.register(netdowngraph, vicious.widgets.net, "${eth0 down_kb}", 0.28)
 netdowncaption = widget({ type = "textbox" })
 vicious.register(netdowncaption, vicious.widgets.net,
-		 "<span weight='bold' color='" .. beautiful.fg_focus .. "'> net</span> ↓: ")
+		 "<span weight='bold' color='" .. beautiful.fg_normal .. "'> net</span> ↓: ")
 
 
 
